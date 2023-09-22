@@ -6,8 +6,8 @@ Software implements a novel linked shrinkage model for two-way interactions, as 
 In addition, it implements the Shapley values derived in the manuscript.
 
 **Data**
-datasynth_Chol.Rdata: synthethic copy of the Helius data used in the manuscript, systolic blood pressure (SBP) as outcome. Rdata file containing the data.frame datasynth with 21,570 rows (samples) and 100 columns; first is the response, 2-15 the main effects, 16-100 the two way interactions
-datasynth_Sbp.Rdata: As datasynth_Chol.Rdata, but with Cholesterol as outcome (first column)
+1. datasynth_Chol.Rdata: synthethic copy of the Helius data used in the manuscript, systolic blood pressure (SBP) as outcome. Rdata file containing the data.frame datasynth with 21,570 rows (samples) and 100 columns; first is the response, 2-15 the main effects, 16-100 the two way interactions.
+2. datasynth_Sbp.Rdata: As datasynth_Chol.Rdata, but with Cholesterol as outcome (first column)
 
 **Scripts**
 1. ThinkInteractionsDemo.R: Demo script illustrating use of our method, Bayint, to fit regression models with two-way interactions. Script also illustrates tools and plots to intepret the model, in particular Shapley values (feature importance). Moreover, it demonstrates how the alternative models were used as comparison (including OLS, two-step, lasso en ridge variations, Bayesian local regression and variations on Bayint). ThinkInteractionsDemo.html contains R markdown compiled report.
