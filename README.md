@@ -1,7 +1,7 @@
 # ThinkInteractions
 R scripts and demo's for fitting a regression model with linked shrinkage.
 
-Scripts: Mark van de Wiel, mark.vdwiel@amsterdamumc.nl
+Scripts: Mark van de Wiel, mark.vdwiel@amsterdamumc.nl.
 Software implements a novel linked shrinkage model for two-way interactions, as presented in manuscript: "Linked shrinkage to improve estimation of interaction effects in regression models."
 In addition, it implements the Shapley values derived in the manuscript.
 
