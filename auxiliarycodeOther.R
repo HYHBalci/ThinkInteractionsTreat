@@ -123,7 +123,7 @@ for(j in js){
   whints <- which(apply(ints,2,function(ab) is.element(j,ab)))
   whothers <- apply(ints[,whints],2,function(ab) setdiff(ab,j))
   shapleylinj <- shapleylinj + (data[,j,drop=FALSE]-ex[j]) %*% t(betapostb[,j,drop=FALSE])
-  shapleyintj <- shapleyintj +1/2*( t((data[,j] - ex[j])*t(data[,whothers])) + 
+  shapleyintj <- shapleyintj +1/2*( (data[,j] - ex[j])*data[,whothers,drop=FALSE] + 
                                       t(t(data[,j,drop=FALSE] %*% matrix(ex[whothers],nrow=1)) -exx[whothers,j])) %*% t(betaposti[,whints])
 }
 shlinpost  <- t(apply(shapleylinj,1,postsum))
