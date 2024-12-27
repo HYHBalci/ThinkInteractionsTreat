@@ -9,7 +9,6 @@
 #'
 #' ## Data preparation
 pmt <- proc.time()
-setwd("C:\\ExternData\\Helius\\Interactions\\Demo")
 show(load("datasynth_Chol.Rdata"))
 load("datasynth_Chol.Rdata")
 
@@ -25,8 +24,8 @@ X1 <- as.matrix(data1[,-1])
 dim(X1)
 
 #' Source the functions Rstan code and other functions
-source('C:/Synchr/Rscripts/SimpleScripts/LinRegr/Interactions/auxiliarycodeRstan.R')
-source('C:/Synchr/Rscripts/SimpleScripts/LinRegr/Interactions/auxiliarycodeOther.R')
+source('auxiliarycodeRstan.R')
+source('auxiliarycodeOther.R')
 
 #' ## New model: Bayint
 #' load RStan
