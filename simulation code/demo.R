@@ -4,7 +4,7 @@ source('simulation code/simulations.R')
 p_main <- 5
 p_noise_main <- 4
 p <- p_main + p_noise_main
-data <- simulate_data(n_samples = 100, p_main = p_main, p_noise_main = p_noise_main, interaction = TRUE, treatment = TRUE, seed = 123)
+data <- simulate_data(n_samples = 100, p_main = p_main, p_noise_main = p_noise_main, interaction = TRUE, treatment = TRUE,seed = 123)
 
 library(rstan)
 data$main_effects

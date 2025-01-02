@@ -1,6 +1,6 @@
 library(MASS)
 
-simulate_data <- function(n_samples, p_main, p_noise_main, interaction = TRUE, treatment = TRUE, seed = 123) {
+simulate_data <- function(n_samples, p_main, p_noise_main, interaction = TRUE, treatment = TRUE, binary = FALSE, heterogeneity = FALSE, seed = 123) {
   # Set the seed for reproducibility
   set.seed(seed)
   
@@ -18,6 +18,11 @@ simulate_data <- function(n_samples, p_main, p_noise_main, interaction = TRUE, t
   main_effects <- rep(0, p)
   non_zero_main_effects <- sample(1:p_main, 5)  # Five non-zero main effects
   main_effects[non_zero_main_effects] <- runif(5, 0.5, 2)  # Small to large values
+  
+  #Heterogeneity effects of treatment
+  main_heterogeneity <- rep(0, p)
+  non_zero_main_effects_heterogeneity <- sample(1:p_main, 2)  # Two non-zero main effects for treatment heterogeneity. 
+  main_heterogeneity[non_zero_main_effects_heterogeneity] <- runif(2, -0.25, 0.25)  # Select smaller values for the treatment effect. 
   
   # Initialize interaction effects
   interaction_effects <- matrix(0, nrow = p, ncol = p)
@@ -59,10 +64,19 @@ simulate_data <- function(n_samples, p_main, p_noise_main, interaction = TRUE, t
     }
   }
   
-  treatment_effect <- if (treatment) rnorm(n, 0, 1) else rep(0, n)
-  
+  if (treatment) {
+    if(binary){
+      treatment_effect <-  rbinom(n, 1, 0.5)
+    } else {
+      treatment_effect <-  rnorm(n, 0, 1)
+    }
   # Simulate response variable
-  linear_predictor <- X %*% main_effects + rowSums((X %*% interaction_effects) * X) + treatment_effect
+  if(heterogeneity){
+    linear_predictor <- X %*% main_effects + rowSums((X %*% interaction_effects) * X) + treatment_effect + (X %*% heterogeneity_coefficients) * treatment_effect
+  } else {
+    linear_predictor <- X %*% main_effects + rowSums((X %*% interaction_effects) * X) + treatment_effect
+  }
+  
   response <- linear_predictor + rnorm(n, 0, 0.25)  # Add Gaussian noise
   
   # Compile the dataset
@@ -89,8 +103,6 @@ simulate_data <- function(n_samples, p_main, p_noise_main, interaction = TRUE, t
   ))
 }
 
-
-# Example usage:
 simulated_data <- simulate_data(n_samples = 200, p_main = 5, p_noise_main = 4, interaction = TRUE, treatment = TRUE, seed = 123)
 
   
