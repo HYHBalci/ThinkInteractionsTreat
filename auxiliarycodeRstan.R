@@ -87,7 +87,7 @@ code_linint_brl_HalfCauchy_treat <- "
     y ~ normal(alpha + X*beta + Xint*betaint + a*gamma,sqrt(sigma2));
   }
 "
-#BayintTreatmentHeter
+#BayintTreatmentHeter i.e. Heterogeneous treatment effects.
 code_linint_brl_HalfCauchy_treat_heter <- "
   data { 
     int<lower=0> p;
@@ -105,28 +105,30 @@ code_linint_brl_HalfCauchy_treat_heter <- "
     real alpha;
     real<lower=0> sigma2;
     real<lower=0.01, upper=1> tau2int;
-    real<lower=0.01, upper=1> tau2heter;
     vector[p] beta;
     vector[p] delta;
     vector[q] betaint;
     real<lower=0>  gam2[p];
     real<lower=0>  tau2[p];
+    real<lower=0> gam2_het[p];
+    real<lower=0> tau2_het[p];
     real gamma;
   }
   model {
-    vector[N] interaction_effect; // Interaction term
-    interaction_effect = (X .* a) * delta; // Element-wise interaction and summation
+    vector[n] interaction_effect; // Interaction term
+    interaction_effect =  (diag_matrix(a) * X) * delta; // Element-wise interaction and summation
     sigma2 ~ inv_gamma(1,0.001);
     tau2int ~ uniform(0.01,1);
-    tau2heter ~ uniform(0.01,1);
     alpha ~ normal(0, sqrt(100));
     for (k in 1:p) {
       gam2[k] ~ inv_gamma(0.5, 1);
       tau2[k] ~ inv_gamma(0.5, 1/gam2[k]);
+      gam2_het[k] ~ inv_gamma(0.5,1);
+      tau2_het[k] ~ inv_gamma(0.5, 1/gam2_het[k]);
     }
     for (i in 1:p) {
       beta[i] ~ normal(0, sqrt(sigma2*tau2[g[i]]));
-      delta[i] ~ normal(0, sqrt(sigma2*tau2[g[i]]*tau2heter))
+      delta[i] ~ normal(0, sqrt(sigma2*tau2_het[g[i]]));
     }
       for (i in 1:q) {
       betaint[i] ~ normal(0, sqrt(sigma2*sqrt(tau2[g1[i]]*tau2[g2[i]])*tau2int));
