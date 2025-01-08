@@ -66,7 +66,12 @@ hist(posterior_samples$gamma, breaks = 30, main = "Posterior of gamma", xlab = "
 
 
 #### HETEROGENEOUS TREATMENT EFFECT #####
+source('auxiliarycodeRstan.R')
+source('auxiliarycodeOther.R')
+source('simulation code/simulations.R')
+library(rstan)
 
+options(mc.cores = parallel::detectCores() - 1)
 pmt <- proc.time()
 stan_linint_brl_HalfCauchy_treat_heter <- stan_model(model_name = "stan_linint_brl_HalfCauchy_treat_heter", 
                                                model_code = code_linint_brl_HalfCauchy_treat_heter)
@@ -75,9 +80,8 @@ proc.time()-pmt
 p_main <- 5
 p_noise_main <- 4
 p <- p_main + p_noise_main
-data <- simulate_data(n_samples = 100, p_main = p_main, p_noise_main = p_noise_main, interaction = TRUE, treatment = TRUE, heterogeneity = TRUE, seed = 123)
+data <- simulate_data(n_samples = 500, p_main = p_main, p_noise_main = p_noise_main, interaction = TRUE, treatment = TRUE, heterogeneity = TRUE, seed = 123)
 
-library(rstan)
 data$main_effects
 
 data1 <- data$simulated_data
@@ -113,7 +117,7 @@ dat <- list(y = Y1, X = Xmain, Xint = Xint, a = A, n = nrow(Xmain), p = p, q = q
 niter = 25000; nwarmup = 5000 
 
 #' NOTE 1: RECOMMENDED TO USE 25000, 5000 FOR FINAL RESULTS 
-Bayint <- suppressWarnings(sampling(stan_linint_brl_HalfCauchy_treat_heter, data = dat, iter = niter, warmup = nwarmup, thin = 10, chain = 1))
+Bayint <- suppressWarnings(sampling(stan_linint_brl_HalfCauchy_treat_heter, data = dat, iter = niter, warmup = nwarmup, thin = 10, chain = 2))
 
 #' Summary of the fit
 print(summary(Bayint)$summary)

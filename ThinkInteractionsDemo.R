@@ -64,7 +64,8 @@ dat <- list(y = Y1, X = Xmain, Xint = Xint, n = nrow(Xmain), p = p, q = q, g=1:p
 niter = 10000; nwarmup = 1000 
 
 #' NOTE 1: RECOMMENDED TO USE 25000, 5000 FOR FINAL RESULTS 
-Bayint <- suppressWarnings(sampling(stan_linint_brl_HalfCauchy, data = dat, iter = niter, warmup = nwarmup, thin = 10, chain = 1))
+rstan_options(auto_write = TRUE)
+Bayint <- suppressWarnings(sampling(stan_linint_brl_HalfCauchy, data = dat, iter = niter, warmup = nwarmup,  control = list(adapt_delta = 0.95, max_treedepth = 10), thin = 10, chain = 1))
 
 #' Summary of the fit
 print(summary(Bayint)$summary)

@@ -24,7 +24,7 @@ simulate_data <- function(n_samples, p_main, p_noise_main, interaction = TRUE, t
   p_heterogeneous <- floor(p/2)
   
   for(j in 1:p_heterogeneous) {
-    main_heterogeneity[i] <- log(1+i)
+    main_heterogeneity[j] <- log(1+j)
   }
   # Initialize interaction effects
   interaction_effects <- matrix(0, nrow = p, ncol = p)
