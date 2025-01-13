@@ -19,3 +19,6 @@ summary(fit)
 fit2 <- refit(fit, commonSup.rule = "sd")
 fit3 <- bartc(y, z, x, subset = fit2$commonSup.sub,
               n.samples = 100L, n.burn = 15L, n.chains = 2L)
+
+#### Employ BCF package
+library(bcf)

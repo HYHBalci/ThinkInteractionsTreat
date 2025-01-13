@@ -34,7 +34,7 @@ print(ate)
 tau.hat <- predict(causal_forest_model, X_test, estimate.variance = TRUE)
 sigma.hat <- sqrt(tau.hat$variance.estimates)
 
-#Employing Bart 
+#Employing Bart (Thisfunction is limited please proceed to use BCF!)
 library(bartCause)
 X1 <- as.matrix(X1)
 confounders_string <- paste(colnames(X1), collapse = " + ")
@@ -50,3 +50,19 @@ fit <- bartc(
 )
 
 summary(fit)
+
+### BCF, Carvalho (2020)
+library(bcf)
+data <- simulate_data(n_samples = 500, p_main = p_main, p_noise_main = p_noise_main, interaction = TRUE, treatment = TRUE, binary = TRUE, seed = 123)
+data1 <- data$simulated_data
+
+Y1 <- as.numeric(data1[,1])
+A <- as.numeric(data1[,47])
+X1 <- as.matrix(data1[,-c(1, ncol(data1))])
+X1 <- X1[, 1:9]
+bcf_fit = bcf(Y1, A, X1, X1, rep(0.5, 500), nburn=2000, nsim=2000)
+
+tau_post = bcf_fit$tau
+tauhat = colMeans(tau_post)
+print(tauhat)
+mean(tauhat)
